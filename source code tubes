@@ -1,0 +1,98 @@
+package main
+
+// ALTHAF TEGAR SOFYAN (2311102217)
+// DESHAN RAFIF ALFARISI (2311102326)
+
+import (
+	"fmt"
+	"time"
+)
+
+type TeamEsport struct {
+	Nama      string
+	PoolPrize float64
+}
+
+var teams = []TeamEsport{
+	{"Fnatic ONIC", 838456},
+	{"Alter Ego", 123881},
+	{"RRQ Hoshi", 472726},
+	{"EVOS Glory", 145285},
+	{"Geek Fam ID", 139014},
+	{"Bigetron Alpha", 124408},
+	{"Rebellion Esports", 36551},
+	{"Dewa United Esports", 28855},
+	{"Team Liquid", 98469},
+}
+
+// Bubble Sort
+func BubbleSort(tims217 []TeamEsport) []TeamEsport {
+	n := len(tims217)
+	for x := 0; x < n-1; x++ {
+		for y := 0; y < n-x-1; y++ {
+			if tims217[y].PoolPrize < tims217[y+1].PoolPrize {
+				tims217[y], tims217[y+1] = tims217[y+1], tims217[y]
+			}
+		}
+	}
+	return tims217
+}
+
+// Merge Sort
+func MergeSort(tims326 []TeamEsport) []TeamEsport {
+	if len(tims326) <= 1 {
+		return tims326
+	}
+
+	mid := len(tims326) / 2
+	left := MergeSort(tims326[:mid])
+	right := MergeSort(tims326[mid:])
+
+	return merge(left, right)
+}
+
+func merge(left, right []TeamEsport) []TeamEsport {
+	result := []TeamEsport{}
+	i, j := 0, 0
+
+	for i < len(left) && j < len(right) {
+		if left[i].PoolPrize > right[j].PoolPrize {
+			result = append(result, left[i])
+			i++
+		} else {
+			result = append(result, right[j])
+			j++
+		}
+	}
+
+	for i < len(left) {
+		result = append(result, left[i])
+		i++
+	}
+
+	for j < len(right) {
+		result = append(result, right[j])
+		j++
+	}
+
+	return result
+}
+
+// Cetak Hasil
+func printHasilAkhir(tims []TeamEsport, sortType string, elapsed time.Duration) {
+	fmt.Printf("\n%s \n", sortType)
+	fmt.Printf("Waktu: %s\n", elapsed)
+	for _, tim := range tims {
+		fmt.Printf("%s: $%.2f\n", tim.Nama, tim.PoolPrize)
+	}
+}
+
+func main() {
+	printHasilAkhir(teams, "DATA ASLI", 0)
+
+	startBubble := time.Now()
+	printHasilAkhir(BubbleSort(append([]TeamEsport{}, teams...)), "BUBBLE SORT", time.Since(startBubble))
+
+	startMerge := time.Now()
+	printHasilAkhir(MergeSort(append([]TeamEsport{}, teams...)), "MERGE SORT", time.Since(startMerge))
+}
